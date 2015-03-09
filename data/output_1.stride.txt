@@ -1,0 +1,4 @@
+SHEET    1   A 1 LYS A   2  LEU A   7  0
+SHEET    1   A 1 GLN A  18  PHE A  23  0
+SHEET    1   A 1 ARG A  29  ASN A  34  0
+SHEET    1   A 1 ASP A  43  ILE A  44  0

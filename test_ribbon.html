@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+		<meta name="viewport" content="width=device-width" />	
+		<title>PDB Viewer</title>
+		<style>
+			/*canvas{border:1px solid #666666;}*/
+			body,html{
+				padding:0;
+				margin:0;
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+		</style>
+		<script src="js/modernizr.webgl.js">//</script>
+		<script src="js/stats.min.js">//</script>
+	</head>
+	<body bgcolor="#000000">
+		<!--
+		<canvas style="width:100%;height:100%">
+		</canvas>
+		-->
+		<script src="js/jquery-1.7.2.min.js">//</script>
+		<script src="js/stats.min.js">//</script>
+		<script src="js/three.js">//</script>
+		<script src="js/WebGLRenderer.js">//</script>
+		<script src="js/TrackballControls.js"></script>
+		<script src="js/pdb/loader.pdb.js">//</script>
+		<script src="js/pdb/pdbData2Cartoon3.js">//</script>
+		<script src="js/basic/basicScene2.js">//</script>
+		<script>
+			document.title="setup";
+			console.log("start");
+			var sceneData=setupScene(window.innerWidth,window.innerHeight);
+			
+			var light=new THREE.DirectionalLight(0xFFFFFF);
+			light.position.z=10;				
+			sceneData.scene.add(light);
+			
+			light=new THREE.DirectionalLight(0xFFFFFF);
+			light.position.z=-10;				
+			sceneData.scene.add(light);
+				
+			var loader=new PDBLoader();
+			document.title="loading";
+			var data=loader.load("data/2lqc.pdb",function(data){
+				document.title="parsing";
+				ribbon=Pdbdata2Cartoon(data,0,"group");
+				sceneData.camera.position.z=30;
+				document.title="ready" + (sceneData.renderer instanceof THREE.WebGLRenderer);
+				THREE.GeometryUtils.center(ribbon.children[0].geometry);
+				//console.log(ribbon);
+				sceneData.scene.add(ribbon);
+				document.body.appendChild(sceneData.renderer.domElement);
+				sceneData.update();
+			},function () {
+				alert("error");
+				document.title="error loading";
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+		<meta name="viewport" content="width=device-width" />	
+		<title>PDB Viewer</title>
+		<style>
+			body,html{
+				padding:0;
+				margin:0;
+			}
+		</style>
+		<script src="js/modernizr.webgl.js">//</script>
+		<script src="js/stats.min.js">//</script>
+	</head>
+	<body bgcolor="#000000">
+		
+		<script src="js/jquery-1.7.2.min.js">//</script>
+		<script src="js/utils/queryString.js">//</script>
+		<script src="js/three.min.js">//</script>
+		<script src="js/WebGLRenderer.js">//</script>
+		<script src="js/TrackballControls.js"></script>
+		<script src="js/pdb/loader.pdb.js">//</script>
+		<script src="js/pdb/pdbData2Cartoon3.js">//</script>
+		<script src="js/basic/basicScene2.js">//</script>
+		<script>
+			var queryParams=parseQueryString();
+			if(queryParams["file"]==null) {
+				document.title="No file specified can not continue";
+				alert("No file specified\n");
+			}else{
+				if(queryParams["title"]==null) {
+					queryParams["title"]="pdb file :"+queryParams["file"];
+				}
+				if(queryParams["color"]==null) {
+					queryParams["color"]="group";
+				}
+				
+				document.title="setup";
+				console.log("start");
+				var sceneData=setupScene(window.innerWidth,window.innerHeight);
+				
+				var light=new THREE.DirectionalLight(0xFFFFFF);
+				light.position.z=10;				
+				sceneData.scene.add(light);
+				
+				light=new THREE.DirectionalLight(0xFFFFFF);
+				light.position.z=-10;				
+				sceneData.scene.add(light);
+					
+				var loader=new PDBLoader();
+				
+				document.title="loading";
+				var data=loader.load(queryParams["file"],function(data){
+					document.title="parsing";
+					console.log(data);
+					ribbon=Pdbdata2Cartoon(data,0,queryParams["color"]);
+					sceneData.camera.position.z=30;
+					
+					document.title="ready";
+					THREE.GeometryUtils.center(ribbon.children[0].geometry);
+					sceneData.scene.add(ribbon);
+					document.body.appendChild(sceneData.renderer.domElement);
+					sceneData.update();
+					document.title=queryParams["title"];
+				},function () {
+					alert("Error loading file");
+					document.title="Error loading file";
+				});
+			}
+		</script>
+	</body>
+</html>

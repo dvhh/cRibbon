@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<title>cRibbon : Protein Ribbon Viewer</title>
+	</head>
+	<body>
+		<h1>cRibbon : Protein Ribbon Viewer</h1>
+		<h2>Overview</h2>
+		<p>
+			cRibbon is a simplistic protein viewer in Cartoon representation implemented in javascript, it aim to have a wide browser compatibility,
+			As long as your browser can use the &lt;canvas&gt; element 
+			[<a href="#foonote_1" name="#note_1" title="Canvas html element description">1</a>]
+			[<a href="#foonote_2" name="#note_2" title="Canvas availability">2</a>], 
+			And can be accelerated with webGL when available 
+			[<a href="#foonote_1" name="#note_1" title="webGL description">1</a>]
+			[<a href="#foonote_2" name="#note_2" title="webGL availability">2</a>].<br/>
+			To achieve this feature it relies on the popular THREE.js 3D abstraction library.
+
+		</p>
+		<h2>Motivations</h2>
+		<p>
+			The initial goal was to provide a basic javascript PDB viewer, other software 3D engine were considered, but THREE.js was selected but its drop in evolution to webGL when implemented, as well as other display methods.</br>
+			Various Java exploit and the growth of mobile equipement accelerated the need for a full javascript implementation.<br/>
+			Of course, such implementations already exist, but have generally Desktop class processor requirement.
+		</p>
+		<h2>Compatiblity</h2>
+		<p>cRibbon has been tested with the following internet browsers</p>
+		<ul>
+			<li>Windows 7
+				<ul>
+					<li>Chrome 26</li>
+					<li>Firefox 22.0a</li>
+					<li>Internet explorer 10</li>
+					<li>Internet explorer 9</li>
+				</ul>
+			</li>
+			<li>
+				Android
+				<ul>
+					<li>Chrome Beta</li>
+					<li>Firefox</li>
+					<li>Opera Beta</li>
+					<li>Opera Mobile</li>
+				</ul>
+			</li>
+			<li>
+				iOS Safari
+			</li>
+			<li>
+				OSX
+				<ul>
+					<li>Safari 5.1.8</li>
+				</ul>
+			</li>
+		</ul>
+		<h2>Limitations</h2>
+		<ul>
+			<li>The ribbons drawn are not so smooth : the ribbons use a flat shading model to accelerate the rendering while keeping a sufficient fidelity</li>
+			<li>Rendering large PDB files is slow, while not implemented yet a polygon reduction feature is planned to further accelerate the rendering</li>
+			<li>the viewing style is currently limited to this light "cartoon view" an atom view is considered</li> 
+		</ul>
+		<h2>Roadmap as of 2013-04</h2>
+		<ul>
+			<li>Usage Simplification : The current implementation requires a lot of code to get started, future development should require the user to use 1 line of code, while keeping the other functions for alowing more complex case scenario</li>
+			<li>Combine all the scripts in one, to reduce the number of http call and provide better gzip compression when available</li>
+			<li>Polygon reduction algorithm : Javascript polygon reduction can be quite slow depending on the number of vertices</li>
+			<li>Script for server side logic and generation : we could lighten the initial work of translating the PDB files to model on the server side</li>
+		</ul>
+		<h2>Examples</h2>
+		<ul>
+		<a href="test_ribbon.html">Basic test</a><br/>
+		<a href="test_embed.html">Embed test</a><br/>
+		<a href="view.html?file=data/pdb1brs.ent&color=group&title=1brs+pdb+file">Test 1brs</a><br/>
+		<a href="view.html?file=data/pdb2gbt.ent&color=secondary&title=2gbt+pdb+file">Test 2gbt</a><br/>
+		</ul>
+		<h2>Workflow and component</h2>
+		<p>
+			setup 3D engine => load PDB => translate to javascript structure => translation to Ribbon model => add model to 3D engine => rendering.
+			THREE.hs version 56
+			Modernizr for feature detection
+		</p>
+		<h2>Troubleshot</h2>
+		<p>
+		</p>
+		<h2>Others known javascript pdb viewer implementation</h2>
+		<ul>
+			<li>jsmol</li>
+		</ul>
+	</body>
+</html>

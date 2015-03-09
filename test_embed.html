@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+		<meta name="viewport" content="width=device-width" />	
+		<title>PDB Viewer</title>
+		<style>
+			/*canvas{border:1px solid #666666;}*/
+			body,html{
+				/*padding:0;
+				margin:0;*/
+			}
+		</style>
+		<script src="js/modernizr.webgl.js">//</script>
+		
+	</head>
+	<body bgcolor="#FFFFFF">
+		<div style="float:left">
+			<b>color by group</b>
+			<div id="view1" style="height:400px;width:600px;border:1px solid red">
+			</div>
+		</div>
+		<div style="float:left">
+			<b>color by secondary structure</b>
+			<div id="view2" style="height:400px;width:600px;border:1px solid red">
+			</div>
+		</div>
+		
+		<script src="js/jquery-1.7.2.min.js">//</script>
+		<script src="js/three.min.js">//</script>
+		<script src="js/WebGLRenderer.js">//</script>
+		<script src="js/TrackballControls.js"></script>
+		<script src="js/pdb/loader.pdb.js">//</script>
+		<script src="js/pdb/pdbData2Cartoon3.js">//</script>
+		<script src="js/basic/basicScene2.js">//</script>
+		<script>
+			document.title="setup";
+			console.log("start");
+			var sceneData1=setupScene(600,400);
+			var sceneData2=setupScene(600,400);
+			
+			var light=new THREE.DirectionalLight(0xFFFFFF);
+			light.position.z=10;				
+			sceneData1.scene.add(light);
+			
+			light=new THREE.DirectionalLight(0xFFFFFF);
+			light.position.z=-10;				
+			sceneData1.scene.add(light);
+			
+			light=new THREE.DirectionalLight(0xFFFFFF);
+			light.position.z=10;				
+			sceneData2.scene.add(light);
+			
+			light=new THREE.DirectionalLight(0xFFFFFF);
+			light.position.z=-10;				
+			sceneData2.scene.add(light);
+				
+			var loader=new PDBLoader();
+			document.title="loading";
+			var data=loader.load("data/2lqc.pdb",function(data){
+				document.title="parsing";
+				var ribbon=Pdbdata2Cartoon(data,0,"group");
+				THREE.GeometryUtils.center(ribbon.children[0].geometry);
+				sceneData1.scene.add(ribbon);
+				sceneData1.camera.position.z=30;
+				document.title="parsing2";
+				ribbon=Pdbdata2Cartoon(data,0,"secondary");
+				sceneData2.scene.add(ribbon);
+				THREE.GeometryUtils.center(ribbon.children[0].geometry);
+				sceneData2.camera.position.z=30;
+				document.title="ready";
+				document.getElementById("view1").appendChild(sceneData1.renderer.domElement);
+				document.getElementById("view2").appendChild(sceneData2.renderer.domElement);
+				sceneData1.update();
+				sceneData2.update();
+			},function () {
+				alert("error");
+				document.title="error loading";
+			});
+
+			/*
+			setInterval( function () {
+
+			    stats.begin();
+
+			    // your code goes here
+
+			    stats.end();
+
+			}, 1000 / 60 );
+			*/
+		</script>
+	</body>
+</html>
